@@ -76,7 +76,7 @@ def xyz_to_lab_tuple(color: CIEXYZColor, illuminant: str = "D65") -> Color:
         if t > CUBE24_116:
             return t ** (1.0 / 3.0)  # (8.6, 8.8, 8.10)
         else:
-            return (841 / 108) * t + 16 / 116  # (8.7, 8.9, 8.11)
+            return ((841 / 108) * t + 16) / 116  # (8.7, 8.9, 8.11)
 
     Lstar = 116 * f(Y / Yn) - 16.0  # L* (8.3)
     Astar = 500 * (f(X / Xn) - f(Y / Yn))  # a* (8.4)
