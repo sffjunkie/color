@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "color"
+version = "0.1.0"
+description = ""
+authors = ["Simon Kennedy <sffjunkie+code@gmail.com>"]
+readme = "ReadMe.md"
+packages = [{ include = "color", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typing-extensions = "^4.4.0"
+
+[tool.isort]
+profile = "black"
+lines_between_sections = 1
+
+[tool.flake8]
+max-line-length = 88
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+    ".ipynb_checkpoints",
+    "poetry.lock",
+]
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.20.0"
+pytest = "^7.2.0"
+flake8 = "^5.0.4"
+Flake8-pyproject = "^1.1.0.post0"
+isort = "^5.10.1"
+black = { version = "^22.10.0", allow-prereleases = true }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
