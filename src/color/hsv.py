@@ -10,10 +10,10 @@ class HSVColor:
     saturation: float = 0.0
     value: float = 0.0
 
-    def from_rgb(self, color: RGBColor):
-        self.hue, self.saturation, self.value = colorsys.rgb_to_hsv(
-            color.red, color.green, color.blue
-        )
+    @classmethod
+    def from_rgb(cls, color: RGBColor):
+        hue, saturation, value = colorsys.rgb_to_hsv(color.red, color.green, color.blue)
+        return cls(hue, saturation, value)
 
     def to_rgb(self) -> RGBColor:
         red, green, blue = colorsys.hsv_to_rgb(self.hue, self.saturation, self.value)
