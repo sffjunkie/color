@@ -3,21 +3,6 @@ from color.clamp import clamp_value
 from color.rgb import RGBColor
 
 
-def luminosity_transform(color: Color, luminosity=0.05):
-    """Transform an RGB color by a luminosity.
-
-    If luminosity is a tuple then the 3 elements are used to transform the red,
-    green and blue values individually. If a float then the same value is used
-    to transform all 3 elements."""
-
-    if isinstance(luminosity, tuple):
-        luminosity = luminosity[:3]
-    else:
-        luminosity = (luminosity, luminosity, luminosity)
-
-    return tuple([clamp_value(e + l) for e, l in zip(color, luminosity)])
-
-
 def rgb_tint(rgb: RGBColor, percent: float = 5):
     """Create a tinted version of the RGB color
 
@@ -27,7 +12,7 @@ def rgb_tint(rgb: RGBColor, percent: float = 5):
                      the tint
     :type percent:  int
     """
-    return luminosity_transform(rgb, percent / 100)
+    return _luminosity_transform(rgb, percent / 100)
 
 
 def rgb_tints(rgb: RGBColor, base_percent: float, count: int, linear: bool = True):
@@ -86,7 +71,7 @@ def rgb_shade(rgb, percent=5):
                     the shade
     :type percent:  int
     """
-    return luminosity_transform(rgb, -percent / 100)
+    return _luminosity_transform(rgb, -percent / 100)
 
 
 def rgb_shades(rgb: RGBColor, base_percent: float, count: int, linear: bool = True):
@@ -132,3 +117,18 @@ def rgb_shades(rgb: RGBColor, base_percent: float, count: int, linear: bool = Tr
                 break
 
     return shades[:count]
+
+
+def _luminosity_transform(color: Color, luminosity=0.05):
+    """Transform an RGB color by a luminosity.
+
+    If luminosity is a tuple then the 3 elements are used to transform the red,
+    green and blue values individually. If a float then the same value is used
+    to transform all 3 elements."""
+
+    if isinstance(luminosity, tuple):
+        luminosity = luminosity[:3]
+    else:
+        luminosity = (luminosity, luminosity, luminosity)
+
+    return tuple([clamp_value(e + l) for e, l in zip(color, luminosity)])
