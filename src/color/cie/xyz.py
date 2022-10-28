@@ -5,7 +5,7 @@
 from dataclasses import dataclass
 from typing import NamedTuple
 
-from color.matrix import Matrix3x1, Matrix3x3
+from matrix import Matrix3x1, Matrix3x3
 
 from . import Illuminants, RGBConversions, RGBReferencePrimaries
 

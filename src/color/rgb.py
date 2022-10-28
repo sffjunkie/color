@@ -9,7 +9,7 @@ from color.cie.xyz import (
     TransformPair,
     xyz_normalized_primary_matrices,
 )
-from color.matrix import Matrix3x1
+from matrix import Matrix3x1
 
 
 @dataclass(slots=True)
