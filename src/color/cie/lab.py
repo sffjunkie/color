@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from color.cie.base import Illuminants
+from color import Color
+from color.cie import Illuminants
 from color.cie.xyz import CIEXYZColor
 
 # References in brackets are from CIE 15:2004 3rd Edition
@@ -14,35 +15,15 @@ class CIELABColor:
     astar: float = 0.0
     bstar: float = 0.0
 
+    def to_xyz(self, illuminant: str = "D65"):
+        return lab_to_xyz(self, illuminant)
 
-def from_xyz(color: CIEXYZColor, illuminant: str = "D65") -> CIELABColor:
-    i = Illuminants[illuminant]
-    Xn = i.x
-    Yn = i.y
-    Zn = 1 - Xn - Yn
-
-    Xn = Xn / Yn
-    Zn = Zn / Yn
-    Yn = 1
-
-    X = color.X
-    Y = color.Y
-    Z = color.Z
-
-    def f(t: float) -> float:
-        if t > CUBE24_116:
-            return t ** (1.0 / 3.0)  # (8.6, 8.8, 8.10)
-        else:
-            return (841 / 108) * t + 16 / 116  # (8.7, 8.9, 8.11)
-
-    Lstar = 116 * f(Y / Yn) - 16.0  # L* (8.3)
-    Astar = 500 * (f(X / Xn) - f(Y / Yn))  # a* (8.4)
-    Bstar = 200 * (f(Y / Yn) - f(Z / Zn))  # b* (8.5)
-
-    return CIELABColor(Lstar, Astar, Bstar)
+    @classmethod
+    def from_xyz(cls, color: CIEXYZColor, illuminant: str = "D65"):
+        return cls(xyz_to_lab_tuple(color, illuminant))
 
 
-def to_xyz(color: CIELABColor, illuminant: str = "D65") -> CIEXYZColor:
+def lab_to_xyz_tuple(color: CIELABColor, illuminant: str = "D65") -> Color:
     i = Illuminants[illuminant]
     Xn = i.x
     Yn = i.y
@@ -70,4 +51,39 @@ def to_xyz(color: CIELABColor, illuminant: str = "D65") -> CIEXYZColor:
     Y = Yn + f(Yn, l_star)
     Z = Zn * f(fZ)
 
-    return CIEXYZColor(X, Y, Z)
+    return X, Y, Z
+
+
+def lab_to_xyz(color: CIELABColor, illuminant: str = "D65") -> CIEXYZColor:
+    return CIEXYZColor(lab_to_xyz_tuple(color, illuminant))
+
+
+def xyz_to_lab_tuple(color: CIEXYZColor, illuminant: str = "D65") -> Color:
+    i = Illuminants[illuminant]
+    Xn = i.x
+    Yn = i.y
+    Zn = 1 - Xn - Yn
+
+    Xn = Xn / Yn
+    Zn = Zn / Yn
+    Yn = 1
+
+    X = color.X
+    Y = color.Y
+    Z = color.Z
+
+    def f(t: float) -> float:
+        if t > CUBE24_116:
+            return t ** (1.0 / 3.0)  # (8.6, 8.8, 8.10)
+        else:
+            return (841 / 108) * t + 16 / 116  # (8.7, 8.9, 8.11)
+
+    Lstar = 116 * f(Y / Yn) - 16.0  # L* (8.3)
+    Astar = 500 * (f(X / Xn) - f(Y / Yn))  # a* (8.4)
+    Bstar = 200 * (f(Y / Yn) - f(Z / Zn))  # b* (8.5)
+
+    return Lstar, Astar, Bstar
+
+
+def xyz_to_lab(color: CIEXYZColor, illuminant: str = "D65") -> CIELABColor:
+    return CIELABColor(xyz_to_lab_tuple(color, illuminant))

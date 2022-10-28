@@ -7,7 +7,7 @@ from typing import NamedTuple
 
 from color.matrix import Matrix3x1, Matrix3x3
 
-from .base import Illuminants, RGBConversions, RGBReferencePrimaries
+from . import Illuminants, RGBConversions, RGBReferencePrimaries
 
 # RGB != CIERGB
 
@@ -72,4 +72,4 @@ def xyz_normalized_primary_matrices(
     return TransformPair(npm, npm.inverse())
 
 
-ColorTransforms = {"sRGB": TransformPair(*xyz_normalized_primary_matrices("sRGB"))}
+RGBColorTransforms = {"sRGB": TransformPair(*xyz_normalized_primary_matrices("sRGB"))}

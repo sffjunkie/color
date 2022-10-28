@@ -2,9 +2,10 @@ from dataclasses import dataclass
 
 from typing_extensions import Self
 
+from color import Color
 from color.cie.xyz import (
     CIEXYZColor,
-    ColorTransforms,
+    RGBColorTransforms,
     TransformPair,
     xyz_normalized_primary_matrices,
 )
@@ -17,11 +18,55 @@ class RGBColor:
     green: float = 0.0
     blue: float = 0.0
 
+    def to_xyz(self, color_space: str = "sRGB"):
+        return rgb_to_xyz(self, color_space)
+
+    @classmethod
+    def from_xyz(cls, color: CIEXYZColor, color_space: str = "sRGB"):
+        return cls(xyz_to_rgb_tuple(color, color_space))
+
     def intensity(self) -> float:
         return color_intensity(self)
 
     def contrast_color(self) -> Self:
         return contrast_color(self)
+
+
+def rgb_to_xyz_tuple(color: RGBColor, color_space: str = "sRGB") -> CIEXYZColor:
+    if color_space not in RGBColorTransforms:
+        try:
+            tf: TransformPair = xyz_normalized_primary_matrices(color_space)
+            RGBColorTransforms[color_space] = tf
+        except KeyError as exc:
+            raise KeyError(f"Unknwon color space {color_space}") from exc
+
+    transform = RGBColorTransforms[color_space].to_xyz
+
+    rgb_m = Matrix3x1.from_iterable((color.red, color.green, color.blue))
+    xyz_m = transform.multiply(rgb_m)
+    return xyz_m.to_iterable()
+
+
+def rgb_to_xyz(color: RGBColor, color_space: str = "sRGB") -> CIEXYZColor:
+    return CIEXYZColor(rgb_to_xyz_tuple(color, color_space))
+
+
+def xyz_to_rgb_tuple(color: CIEXYZColor, color_space: str = "sRGB") -> Color:
+    if color_space not in RGBColorTransforms:
+        try:
+            tf: TransformPair = xyz_normalized_primary_matrices(color_space)
+            RGBColorTransforms[color_space] = tf
+        except KeyError as exc:
+            raise KeyError(f"Unknwon color space {color_space}") from exc
+
+    transform = RGBColorTransforms[color_space].to_rgb
+    xyz_m = Matrix3x1((color.X, color.Y, color.Z))
+    rgb_m = transform.multiply(xyz_m)
+    return rgb_m.to_iterable()
+
+
+def xyz_to_rgb(color: CIEXYZColor, color_space: str = "sRGB") -> RGBColor:
+    return RGBColor(xyz_to_rgb_tuple(color, color_space))
 
 
 def color_intensity(color: RGBColor) -> float:
@@ -37,32 +82,3 @@ def contrast_color(rgb: RGBColor) -> RGBColor:
         return (255.0, 255.0, 255.0)
     else:
         return (0.0, 0.0, 0.0)
-
-
-def rgb_to_xyz(color: RGBColor, color_space: str = "sRGB") -> CIEXYZColor:
-    if color_space not in ColorTransforms:
-        try:
-            tf: TransformPair = xyz_normalized_primary_matrices(color_space)
-            ColorTransforms[color_space] = tf
-        except KeyError as exc:
-            raise KeyError(f"Unknwon color space {color_space}") from exc
-
-    transform = ColorTransforms[color_space].to_xyz
-
-    rgb_m = Matrix3x1.from_iterable((color.red, color.green, color.blue))
-    xyz_m = transform.multiply(rgb_m)
-    return CIEXYZColor(xyz_m.to_iterable())
-
-
-def xyz_to_rgb(color: CIEXYZColor, color_space: str = "sRGB") -> RGBColor:
-    if color_space not in ColorTransforms:
-        try:
-            tf: TransformPair = xyz_normalized_primary_matrices(color_space)
-            ColorTransforms[color_space] = tf
-        except KeyError as exc:
-            raise KeyError(f"Unknwon color space {color_space}") from exc
-
-    transform = ColorTransforms[color_space].to_rgb
-    xyz_m = Matrix3x1((color.X, color.Y, color.Z))
-    rgb_m = transform.multiply(xyz_m)
-    return RGBColor(rgb_m.to_iterable())
