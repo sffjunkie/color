@@ -25,6 +25,17 @@ class RGBColor:
     def from_xyz(cls, color: CIEXYZColor, color_space: str = "sRGB"):
         return cls(xyz_to_rgb_tuple(color, color_space))
 
+    def to_ints(self):
+        return (
+            int(self.red * 255.0),
+            int(self.green * 255.0),
+            int(self.blue * 255.0),
+        )
+
+    @classmethod
+    def from_ints(cls, *args: int):
+        return cls(args[0] / 255.0, args[1] / 255.0, args[2] / 255.0)
+
     def intensity(self) -> float:
         return color_intensity(self)
 

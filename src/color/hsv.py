@@ -18,3 +18,17 @@ class HSVColor:
     def to_rgb(self) -> RGBColor:
         red, green, blue = colorsys.hsv_to_rgb(self.hue, self.saturation, self.value)
         return RGBColor(red, green, blue)
+
+    def to_ints(self) -> tuple[int, int, int]:
+        return (
+            int(self.hue * 360),
+            int(self.saturation * 100.0),
+            int(self.value * 100.0),
+        )
+
+    @classmethod
+    def from_ints(cls, *args: int):
+        hue = args[0] / 360.0
+        saturation = args[1] / 100.0
+        value = args[2] / 100.0
+        return cls(hue, saturation, value)
