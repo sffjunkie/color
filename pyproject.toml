@@ -33,6 +33,7 @@ flake8 = "^5.0.4"
 Flake8-pyproject = "^1.1.0.post0"
 isort = "^5.10.1"
 black = { version = "^22.10.0", allow-prereleases = true }
+pytest-cov = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]
