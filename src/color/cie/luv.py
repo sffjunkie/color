@@ -58,7 +58,7 @@ def luv_to_xyz_tuple(color: CIELuvColor, illuminant: str = "D65") -> CIEXYZColor
 
 
 def luv_to_xyz(color: CIELuvColor, illuminant: str = "D65") -> CIEXYZColor:
-    return CIEXYZColor(luv_to_xyz_tuple(color, illuminant))
+    return CIEXYZColor(*luv_to_xyz_tuple(color, illuminant))
 
 
 def xyz_to_luv_tuple(color: CIEXYZColor, illuminant: str = "D65") -> Color:
@@ -97,4 +97,4 @@ def xyz_to_luv_tuple(color: CIEXYZColor, illuminant: str = "D65") -> Color:
 
 
 def xyz_to_luv(color: CIEXYZColor, illuminant: str = "D65") -> CIELuvColor:
-    return CIELuvColor(xyz_to_luv_tuple(color, illuminant))
+    return CIELuvColor(*xyz_to_luv_tuple(color, illuminant))

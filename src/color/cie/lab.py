@@ -55,7 +55,7 @@ def lab_to_xyz_tuple(color: CIELABColor, illuminant: str = "D65") -> Color:
 
 
 def lab_to_xyz(color: CIELABColor, illuminant: str = "D65") -> CIEXYZColor:
-    return CIEXYZColor(lab_to_xyz_tuple(color, illuminant))
+    return CIEXYZColor(*lab_to_xyz_tuple(color, illuminant))
 
 
 def xyz_to_lab_tuple(color: CIEXYZColor, illuminant: str = "D65") -> Color:
@@ -86,4 +86,4 @@ def xyz_to_lab_tuple(color: CIEXYZColor, illuminant: str = "D65") -> Color:
 
 
 def xyz_to_lab(color: CIEXYZColor, illuminant: str = "D65") -> CIELABColor:
-    return CIELABColor(xyz_to_lab_tuple(color, illuminant))
+    return CIELABColor(*xyz_to_lab_tuple(color, illuminant))
