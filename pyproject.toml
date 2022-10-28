@@ -9,6 +9,7 @@ packages = [{ include = "color", from = "src" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 typing-extensions = "^4.4.0"
+matrix = {path = "matrix"}
 
 [tool.isort]
 profile = "black"
