@@ -62,7 +62,7 @@ def rgb_shade(rgb, percent=5):
 
     :param rgb: The RGB value for which to calculate the tint
     :param percent: Determines the percent between the specified color and
-                    the shade
+                    the shade (default=5)
     """
     return _luminosity_transform(rgb, -percent / 100)
 
@@ -73,6 +73,8 @@ def rgb_shades(rgb: RGBColor, base_percent: float, count: int, linear: bool = Tr
     :param rgb: The RGB value for which to calculate the shades
     :param base_percent: Determines the factor between the returned colors
     :param count: The number of shades to return
+    :param linear: If True then the base_percent is added each time otherwise
+        base_percent is reduced the closer it gets to 1.0
     """
     factor = base_percent
     shades = []
