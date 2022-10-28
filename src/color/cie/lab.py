@@ -11,16 +11,16 @@ CUBE24_116 = (24.0 / 116.0) ** 3
 
 @dataclass(slots=True)
 class CIELABColor:
-    Lstar: float = 0.0
-    astar: float = 0.0
-    bstar: float = 0.0
+    L: float = 0.0
+    a: float = 0.0
+    b: float = 0.0
 
     def to_xyz(self, illuminant: str = "D65"):
         return lab_to_xyz(self, illuminant)
 
     @classmethod
     def from_xyz(cls, color: CIEXYZColor, illuminant: str = "D65"):
-        return cls(xyz_to_lab_tuple(color, illuminant))
+        return cls(*xyz_to_lab_tuple(color, illuminant))
 
 
 def lab_to_xyz_tuple(color: CIELABColor, illuminant: str = "D65") -> Color:
@@ -33,13 +33,13 @@ def lab_to_xyz_tuple(color: CIELABColor, illuminant: str = "D65") -> Color:
     Zn = Zn / Yn
     Yn = 1
 
-    l_star = color.Lstar
-    a_star = color.astar
-    b_star = color.bstar
+    l_star = color.L
+    a_star = color.a
+    b_star = color.b
 
-    fY = l_star + 16.0 / 116.0  # (D.1)
-    fX = a_star / 500.0 + fY  # (D.2)
-    fZ = fY - b_star / 200.0  # (D.3)
+    fY = (l_star + 16.0) / 116.0  # (D.1)
+    fX = (a_star / 500.0) + fY  # (D.2)
+    fZ = fY - (b_star / 200.0)  # (D.3)
 
     def f(t: float, l_star: float = -1) -> float:
         if t > 24.0 / 116.0 or l_star > 8.0:
