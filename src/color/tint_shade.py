@@ -7,10 +7,8 @@ def rgb_tint(rgb: RGBColor, percent: float = 5):
     """Create a tinted version of the RGB color
 
     :param rgb: The RGB value for which to calculate the tint
-    :type rgb:  tuple
     :param percent: Determines the percent between the specified color and
                      the tint
-    :type percent:  int
     """
     return _luminosity_transform(rgb, percent / 100)
 
@@ -19,11 +17,8 @@ def rgb_tints(rgb: RGBColor, base_percent: float, count: int, linear: bool = Tru
     """Produce a list of tints from the base color
 
     :param rgb: The RGB value for which to calculate the tints
-    :type rgb:  tuple
     :param base_percent: Determines the factor between the returned colors
-    :type base_percent:  float
     :param count: The number of tints to return
-    :type count: int
     """
     factor = base_percent
     tints = []
@@ -66,10 +61,8 @@ def rgb_shade(rgb, percent=5):
     """Create a shade of the RGB color
 
     :param rgb: The RGB value for which to calculate the tint
-    :type rgb:  tuple
     :param percent: Determines the percent between the specified color and
                     the shade
-    :type percent:  int
     """
     return _luminosity_transform(rgb, -percent / 100)
 
@@ -78,11 +71,8 @@ def rgb_shades(rgb: RGBColor, base_percent: float, count: int, linear: bool = Tr
     """Produce a list of shades from the base color
 
     :param rgb: The RGB value for which to calculate the shades
-    :type rgb:  tuple
     :param base_percent: Determines the factor between the returned colors
-    :type base_percent:  float
     :param count: The number of shades to return
-    :type count:  int
     """
     factor = base_percent
     shades = []
