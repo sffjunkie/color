@@ -1,16 +1,6 @@
 from color import Color
+from color.clamp import clamp_value
 from color.rgb import RGBColor
-
-
-def clamp(value: float) -> float:
-    """Clamp a float between 0.0 and 1.0"""
-
-    return min(max(0.0, float(value)), 1.0)
-
-
-def clamped_tuple(value: Color):
-    """Clamps the values in a tuple between 0.0 and 1.0"""
-    return tuple([clamp(elem) for elem in value])
 
 
 def luminosity_transform(color: Color, luminosity=0.05):
@@ -25,7 +15,7 @@ def luminosity_transform(color: Color, luminosity=0.05):
     else:
         luminosity = (luminosity, luminosity, luminosity)
 
-    return tuple([clamp(e + l) for e, l in zip(color, luminosity)])
+    return tuple([clamp_value(e + l) for e, l in zip(color, luminosity)])
 
 
 def rgb_tint(rgb: RGBColor, percent: float = 5):
@@ -53,7 +43,7 @@ def rgb_tints(rgb: RGBColor, base_percent: float, count: int, linear: bool = Tru
     factor = base_percent
     tints = []
     number_to_calc = (2 * count) - 1
-    for dummy in range(number_to_calc):
+    for _ in range(number_to_calc):
         if factor < 100:
             tints.append(rgb_tint(rgb, factor))
         else:
@@ -65,7 +55,7 @@ def rgb_tints(rgb: RGBColor, base_percent: float, count: int, linear: bool = Tru
             factor *= 1.0 + (base_percent / 100.0)
 
     # Remove any duplicates from the end
-    for dummy in range(number_to_calc - 1):
+    for _ in range(number_to_calc - 1):
         t1 = tints[-1]
         t2 = tints[-2]
 
