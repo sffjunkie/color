@@ -45,7 +45,7 @@ def lab_to_xyz_tuple(color: CIELABColor, illuminant: str = "D65") -> Color:
         if t > 24.0 / 116.0 or l_star > 8.0:
             return t**3  # (D.4, D.6, D.7)
         else:
-            return (t - 16.0 / 116.0) * (108.0 / 841.0)  # (D.5, D.7, D.9)
+            return (t - (16.0 / 116.0)) * (108.0 / 841.0)  # (D.5, D.7, D.9)
 
     X = Xn * f(fX)
     Y = Yn + f(Yn, l_star)
